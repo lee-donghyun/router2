@@ -75,9 +75,9 @@ export const BrowserRouter = ({ ...props }: RouterProps) => {
 export const Link = ({
   pathname,
   query,
+  replace,
   ...ancorProps
-}: History &
-  Omit<
+}: History & { replace?: boolean } & Omit<
     DetailedHTMLProps<
       AnchorHTMLAttributes<HTMLAnchorElement>,
       HTMLAnchorElement
@@ -94,7 +94,9 @@ export const Link = ({
       onClick={(e) => {
         e.preventDefault();
         setHistory(data);
-        history.pushState(data, "", url);
+        replace
+          ? history.replaceState(data, "", url)
+          : history.pushState(data, "", url);
         ancorProps.onClick?.(e);
       }}
     />
