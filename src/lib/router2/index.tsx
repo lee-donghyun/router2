@@ -19,6 +19,9 @@ type RouterProps = {
   match: (path: string, pathname: string) => boolean;
 };
 
+if (window.location.pathname.endsWith("/")) {
+  history.replaceState(undefined, "", window.location.pathname.slice(0, -1));
+}
 const initialHistory: History = {
   pathname: window.location.pathname,
   query: window.location.search
@@ -79,7 +82,7 @@ export const Link = ({
   pathname,
   query,
   replace,
-  ...ancorProps
+  ...anchorProps
 }: History & { replace?: boolean } & Omit<
     DetailedHTMLProps<
       AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -92,7 +95,7 @@ export const Link = ({
   const data = { pathname, query };
   return (
     <a
-      {...ancorProps}
+      {...anchorProps}
       href={url}
       onClick={(e) => {
         e.preventDefault();
@@ -100,7 +103,7 @@ export const Link = ({
         replace
           ? history.replaceState(data, "", url)
           : history.pushState(data, "", url);
-        ancorProps.onClick?.(e);
+        anchorProps.onClick?.(e);
       }}
     />
   );
