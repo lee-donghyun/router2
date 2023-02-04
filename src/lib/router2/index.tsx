@@ -120,3 +120,20 @@ export const matchDynamicRoute = (path: string, pathname: string) => {
   }
   return path === pathname;
 };
+
+export const useRouter = () => {
+  const history = useContext(historyContext);
+  const setHistory = useContext(setHistoryContext);
+  const navigate = (history: History, options?: { replace?: boolean }) => {
+    const url = history.query
+      ? `${history.pathname}?${new URLSearchParams(history.query)}`
+      : history.pathname;
+    setHistory(history);
+    options?.replace
+      ? window.history.replaceState(history, "", url)
+      : window.history.pushState(history, "", url);
+  };
+  return { ...history, navigate };
+};
+
+// add support dynamic route params
