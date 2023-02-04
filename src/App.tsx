@@ -1,12 +1,18 @@
 import "./App.css";
-import { BrowserRouter, Link } from "./lib/router2";
+import { BrowserRouter, Link, matchDynamicRoute } from "./lib/router2";
 
 function App() {
   return (
     <div>
       <BrowserRouter
-        routes={{ "/": Index, "/a": A, "/b": B, "/404": NotFound }}
-        match={(path) => path}
+        routes={{
+          "/": Index,
+          "/a": A,
+          "/a/:about": B,
+          "/b": B,
+          "/404": NotFound,
+        }}
+        match={matchDynamicRoute}
       />
     </div>
   );
