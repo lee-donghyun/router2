@@ -138,11 +138,25 @@ export const useRouter = () => {
       ? window.history.replaceState(history, "", url)
       : window.history.pushState(history, "", url);
   };
+  const getParams = () => {
+    const pathParams = path
+      ?.split("/")
+      .map((path, index) => [path, index] as const)
+      .filter(([path]) => path.startsWith(":"));
+    const pathnames = history.pathname.split("/");
+    return {
+      ...history.query,
+      ...Object.fromEntries(
+        pathParams?.map(([path, index]) => [path, pathnames[index]]) ?? []
+      ),
+    };
+  };
   return {
-    ...history,
     path,
     navigate,
+    pathname: history.pathname,
+    get params() {
+      return getParams();
+    },
   };
 };
-
-// add support dynamic route params

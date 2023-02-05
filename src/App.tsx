@@ -65,6 +65,6 @@ const B = () => {
 };
 
 const Current = () => {
-  const { pathname, query, path } = useRouter();
-  return <p>{JSON.stringify({ pathname, query, path })}</p>;
+  const { pathname, path, params } = useRouter();
+  return <p>{JSON.stringify({ pathname, path, params })}</p>;
 };
