@@ -1,10 +1,5 @@
 import "./App.css";
-import {
-  BrowserRouter,
-  Link,
-  matchDynamicRoute,
-  useRouter,
-} from "./lib/router2";
+import { BrowserRouter, Link, useRouter } from "./lib/router2";
 
 function App() {
   return (

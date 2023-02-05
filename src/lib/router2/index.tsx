@@ -112,7 +112,7 @@ export const Link = ({
   );
 };
 
-export const matchDynamicRoute = (path: string, pathname: string) => {
+const matchDynamicRoute = (path: string, pathname: string) => {
   if (path.includes("/:")) {
     const pathes = path.split("/");
     const pathnames = pathname.split("/");
