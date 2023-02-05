@@ -33,6 +33,7 @@ const historyContext = createContext<History>(initialHistory);
 const setHistoryContext = createContext<Dispatch<SetStateAction<History>>>(
   () => {}
 );
+const pathContext = createContext<string | undefined>(undefined);
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [history, setHistory] = useState<History>(initialHistory);
@@ -61,11 +62,14 @@ const EventListener = ({ children }: { children: React.ReactNode }) => {
 
 const Router = ({ routes, match }: RouterProps) => {
   const { pathname } = useContext(historyContext);
-  const Page =
-    Object.entries(routes)
-      .sort((a, b) => (a[0] > b[0] ? -1 : 1))
-      .find(([path]) => match(path, pathname))?.[1] ?? routes["/404"];
-  return <Page />;
+  const [path, Page] = Object.entries(routes)
+    .sort((a, b) => (a[0] > b[0] ? -1 : 1))
+    .find(([path]) => match(path, pathname)) ?? [, routes["/404"]];
+  return (
+    <pathContext.Provider value={path}>
+      <Page />
+    </pathContext.Provider>
+  );
 };
 
 export const BrowserRouter = ({ ...props }: RouterProps) => {
@@ -123,6 +127,7 @@ export const matchDynamicRoute = (path: string, pathname: string) => {
 
 export const useRouter = () => {
   const history = useContext(historyContext);
+  const path = useContext(pathContext);
   const setHistory = useContext(setHistoryContext);
   const navigate = (history: History, options?: { replace?: boolean }) => {
     const url = history.query
@@ -133,7 +138,11 @@ export const useRouter = () => {
       ? window.history.replaceState(history, "", url)
       : window.history.pushState(history, "", url);
   };
-  return { ...history, navigate };
+  return {
+    ...history,
+    path,
+    navigate,
+  };
 };
 
 // add support dynamic route params
