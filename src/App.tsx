@@ -17,7 +17,6 @@ function App() {
           "/b": B,
           "/404": NotFound,
         }}
-        match={matchDynamicRoute}
       />
     </div>
   );

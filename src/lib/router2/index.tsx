@@ -16,7 +16,6 @@ type History = {
 
 type RouterProps = {
   routes: Record<string, () => JSX.Element> & Record<"/404", () => JSX.Element>;
-  match: (path: string, pathname: string) => boolean;
 };
 
 if (window.location.pathname.endsWith("/")) {
@@ -60,11 +59,11 @@ const EventListener = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const Router = ({ routes, match }: RouterProps) => {
+const Router = ({ routes }: RouterProps) => {
   const { pathname } = useContext(historyContext);
   const [path, Page] = Object.entries(routes)
     .sort((a, b) => (a[0] > b[0] ? -1 : 1))
-    .find(([path]) => match(path, pathname)) ?? [, routes["/404"]];
+    .find(([path]) => matchDynamicRoute(path, pathname)) ?? [, routes["/404"]];
   return (
     <pathContext.Provider value={path}>
       <Page />
