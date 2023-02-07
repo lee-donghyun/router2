@@ -18,6 +18,18 @@ type RouterProps = {
   routes: Record<string, () => JSX.Element> & Record<"/404", () => JSX.Element>;
 };
 
+type Router = {
+  path: string | undefined;
+  navigate: (
+    history: History,
+    options?: {
+      replace?: boolean;
+    }
+  ) => void;
+  pathname: string;
+  params: Record<string, string>;
+};
+
 if (window.location.pathname.endsWith("/")) {
   history.replaceState(undefined, "", window.location.pathname.slice(0, -1));
 }
@@ -32,7 +44,7 @@ const historyContext = createContext<History>(initialHistory);
 const setHistoryContext = createContext<Dispatch<SetStateAction<History>>>(
   () => {}
 );
-const pathContext = createContext<string | undefined>(undefined);
+const routerContext = createContext<Router>({} as Router);
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [history, setHistory] = useState<History>(initialHistory);
@@ -64,10 +76,11 @@ const Router = ({ routes }: RouterProps) => {
   const [path, Page] = Object.entries(routes)
     .sort((a, b) => (a[0] > b[0] ? -1 : 1))
     .find(([path]) => matchDynamicRoute(path, pathname)) ?? [, routes["/404"]];
+  const router = useCreateSingletonRouter(path);
   return (
-    <pathContext.Provider value={path}>
+    <routerContext.Provider value={router}>
       <Page />
-    </pathContext.Provider>
+    </routerContext.Provider>
   );
 };
 
@@ -93,19 +106,15 @@ export const Link = ({
     >,
     "href"
   >) => {
-  const setHistory = useContext(setHistoryContext);
   const url = query ? `${pathname}?${new URLSearchParams(query)}` : pathname;
-  const data = { pathname, query };
+  const router = useRouter();
   return (
     <a
       {...anchorProps}
       href={url}
       onClick={(e) => {
         e.preventDefault();
-        setHistory(data);
-        replace
-          ? history.replaceState(data, "", url)
-          : history.pushState(data, "", url);
+        router.navigate({ pathname, query }, { replace });
         anchorProps.onClick?.(e);
       }}
     />
@@ -124,9 +133,8 @@ const matchDynamicRoute = (path: string, pathname: string) => {
   return path === pathname;
 };
 
-export const useRouter = () => {
+const useCreateSingletonRouter = (path: string | undefined) => {
   const history = useContext(historyContext);
-  const path = useContext(pathContext);
   const setHistory = useContext(setHistoryContext);
   const navigate = (history: History, options?: { replace?: boolean }) => {
     const url = history.query
@@ -154,8 +162,8 @@ export const useRouter = () => {
     path,
     navigate,
     pathname: history.pathname,
-    get params() {
-      return getParams();
-    },
+    params: getParams(),
   };
 };
+
+export const useRouter = () => useContext(routerContext);
