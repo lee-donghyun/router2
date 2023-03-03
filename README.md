@@ -1,3 +1,3 @@
 # router2
 
-client side roter for SPA
+client side router for SPA
