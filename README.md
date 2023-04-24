@@ -6,8 +6,8 @@ client side router for SPA
 <BrowserRouter
   routes={{
     "/": Index,
-    "/a": A, // dynamic routes
-    "/a/:about": B,
+    "/a": A,
+    "/a/:about": B, // dynamic routes
     "/b": B,
     "/404": NotFound, // reserved path
   }}
