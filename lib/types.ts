@@ -5,6 +5,7 @@ export interface History {
 
 export interface RouterProps {
   routes: Record<string, () => JSX.Element> & Record<"/404", () => JSX.Element>;
+  children?: (Page: () => JSX.Element) => JSX.Element;
 }
 
 export interface Router {

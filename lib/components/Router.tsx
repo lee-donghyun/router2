@@ -6,7 +6,7 @@ import { useCreateSingletonRouter } from "../hooks/useCreateSingletonRouter";
 import { RouterProps } from "../types";
 import { matchDynamicRoute } from "../utils";
 
-export const Router = ({ routes }: RouterProps) => {
+export const Router = ({ routes, children: chidren }: RouterProps) => {
   const { pathname } = useContext(historyContext);
   const [path, Page] = Object.entries(routes)
     .sort((a, b) => (a[0] > b[0] ? -1 : 1))
@@ -17,7 +17,7 @@ export const Router = ({ routes }: RouterProps) => {
   const router = useCreateSingletonRouter(path);
   return (
     <routerContext.Provider value={router}>
-      <Page />
+      {chidren ? chidren(Page) : <Page />}
     </routerContext.Provider>
   );
 };
