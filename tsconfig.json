@@ -4,6 +4,8 @@
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "esModuleInterop": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "declaration": true,
+    "declarationDir": "dist"
   }
 }
