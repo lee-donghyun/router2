@@ -8,6 +8,8 @@
     "lint": "eslint lib --fix",
     "format": "prettier . --write"
   },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "peerDependencies": {
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.19",
