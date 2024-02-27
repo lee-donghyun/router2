@@ -5,7 +5,8 @@
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint lib --fix",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "prepublish": "npm run build"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
