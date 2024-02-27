@@ -1,6 +1,4 @@
 {
   "extends": ["eslint-config-react-app-essentials"],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  }
+  "parserOptions": { "project": "./tsconfig.json" }
 }

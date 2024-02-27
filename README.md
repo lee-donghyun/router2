@@ -2,6 +2,14 @@
 
 client side router for SPA
 
+## Getting Started
+
+```bash
+npm install router2
+```
+
+## Usage
+
 ```tsx
 <BrowserRouter
   routes={{
