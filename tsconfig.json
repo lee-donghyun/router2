@@ -1,5 +1,4 @@
 {
-  "include": ["lib"],
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
