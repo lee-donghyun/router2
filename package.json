@@ -1,22 +1,29 @@
 {
   "name": "router2",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "rollup -c",
+    "lint": "eslint lib --fix",
+    "format": "prettier . --write"
   },
-  "dependencies": {
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "peerDependencies": {
+    "@types/react": "^18.2.59",
+    "@types/react-dom": "^18.2.19",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "eslint": "^8.57.0",
+    "eslint-config-react-app-essentials": "^7.0.0",
+    "prettier": "^3.2.5",
+    "rollup": "^4.12.0",
+    "tslib": "^2.6.2"
   }
 }
