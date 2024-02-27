@@ -9,30 +9,10 @@ import {
   useState,
 } from "react";
 
-type History = {
-  pathname: string;
-  query?: Record<string, string>;
-};
+import { History, Router, RouterProps } from "./types";
+import { useOnce } from "./hooks";
+import { initializeBrowserHistory, matchDynamicRoute } from "./utils";
 
-type RouterProps = {
-  routes: Record<string, () => JSX.Element> & Record<"/404", () => JSX.Element>;
-};
-
-type Router = {
-  path: string | undefined;
-  navigate: (
-    history: History,
-    options?: {
-      replace?: boolean;
-    }
-  ) => void;
-  pathname: string;
-  params: Record<string, string>;
-};
-
-if (window.location.pathname.endsWith("/")) {
-  history.replaceState(undefined, "", window.location.pathname.slice(0, -1));
-}
 const initialHistory: History = {
   pathname: window.location.pathname,
   query: window.location.search
@@ -42,7 +22,7 @@ const initialHistory: History = {
 
 const historyContext = createContext<History>(initialHistory);
 const setHistoryContext = createContext<Dispatch<SetStateAction<History>>>(
-  () => {}
+  () => {},
 );
 const routerContext = createContext<Router>({} as Router);
 
@@ -85,6 +65,7 @@ const Router = ({ routes }: RouterProps) => {
 };
 
 export const BrowserRouter = ({ ...props }: RouterProps) => {
+  useOnce(initializeBrowserHistory);
   return (
     <Provider>
       <EventListener>
@@ -121,18 +102,6 @@ export const Link = ({
   );
 };
 
-const matchDynamicRoute = (path: string, pathname: string) => {
-  if (path.includes("/:")) {
-    const pathes = path.split("/");
-    const pathnames = pathname.split("/");
-    return (
-      pathes.length === pathnames.length &&
-      pathnames.every((v, i) => v === pathes[i] || pathes[i].startsWith(":"))
-    );
-  }
-  return path === pathname;
-};
-
 const useCreateSingletonRouter = (path: string | undefined) => {
   const history = useContext(historyContext);
   const setHistory = useContext(setHistoryContext);
@@ -154,7 +123,7 @@ const useCreateSingletonRouter = (path: string | undefined) => {
     return {
       ...history.query,
       ...Object.fromEntries(
-        pathParams?.map(([path, index]) => [path, pathnames[index]]) ?? []
+        pathParams?.map(([path, index]) => [path, pathnames[index]]) ?? [],
       ),
     };
   };
