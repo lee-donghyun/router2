@@ -2,28 +2,20 @@ import {
   AnchorHTMLAttributes,
   createContext,
   DetailedHTMLProps,
-  Dispatch,
-  SetStateAction,
   useContext,
   useEffect,
   useState,
 } from "react";
 
+import {
+  historyContext,
+  initialHistory,
+  setHistoryContext,
+} from "./contexts/history";
+import { useOnce } from "./hooks/useOnce";
 import { History, Router, RouterProps } from "./types";
-import { useOnce } from "./hooks";
 import { initializeBrowserHistory, matchDynamicRoute } from "./utils";
 
-const initialHistory: History = {
-  pathname: window.location.pathname,
-  query: window.location.search
-    ? Object.fromEntries(new URLSearchParams(window.location.search).entries())
-    : undefined,
-};
-
-const historyContext = createContext<History>(initialHistory);
-const setHistoryContext = createContext<Dispatch<SetStateAction<History>>>(
-  () => {},
-);
 const routerContext = createContext<Router>({} as Router);
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
@@ -41,13 +33,13 @@ const EventListener = ({ children }: { children: React.ReactNode }) => {
   const setHistory = useContext(setHistoryContext);
   useEffect(() => {
     const onPopState = (e: PopStateEvent) => {
-      setHistory(e.state || initialHistory);
+      setHistory((e.state as History | undefined) ?? initialHistory);
     };
     window.addEventListener("popstate", onPopState);
     return () => {
       window.removeEventListener("popstate", onPopState);
     };
-  }, []);
+  }, [setHistory]);
   return <>{children}</>;
 };
 
@@ -55,7 +47,10 @@ const Router = ({ routes }: RouterProps) => {
   const { pathname } = useContext(historyContext);
   const [path, Page] = Object.entries(routes)
     .sort((a, b) => (a[0] > b[0] ? -1 : 1))
-    .find(([path]) => matchDynamicRoute(path, pathname)) ?? [, routes["/404"]];
+    .find(([path]) => matchDynamicRoute(path, pathname)) ?? [
+    undefined,
+    routes["/404"],
+  ];
   const router = useCreateSingletonRouter(path);
   return (
     <routerContext.Provider value={router}>
@@ -87,7 +82,9 @@ export const Link = ({
     >,
     "href"
   >) => {
-  const url = query ? `${pathname}?${new URLSearchParams(query)}` : pathname;
+  const url = query
+    ? `${pathname}?${new URLSearchParams(query).toString()}`
+    : pathname;
   const router = useRouter();
   return (
     <a
@@ -107,7 +104,7 @@ const useCreateSingletonRouter = (path: string | undefined) => {
   const setHistory = useContext(setHistoryContext);
   const navigate = (history: History, options?: { replace?: boolean }) => {
     const url = history.query
-      ? `${history.pathname}?${new URLSearchParams(history.query)}`
+      ? `${history.pathname}?${new URLSearchParams(history.query).toString()}`
       : history.pathname;
     setHistory(history);
     options?.replace

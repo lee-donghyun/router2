@@ -1,13 +1,13 @@
-export type History = {
+export interface History {
   pathname: string;
   query?: Record<string, string>;
-};
+}
 
-export type RouterProps = {
+export interface RouterProps {
   routes: Record<string, () => JSX.Element> & Record<"/404", () => JSX.Element>;
-};
+}
 
-export type Router = {
+export interface Router {
   path: string | undefined;
   navigate: (
     history: History,
@@ -17,4 +17,4 @@ export type Router = {
   ) => void;
   pathname: string;
   params: Record<string, string>;
-};
+}
