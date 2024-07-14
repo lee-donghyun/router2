@@ -1,5 +1,7 @@
 # router2
 
+Client side routing for React applications
+
 ## Overview
 
 The Router2 provides a way to manage routing in a React application. It supports history management, dynamic routing, and link creation.
@@ -20,11 +22,13 @@ The BrowserRouter component is the main component of this library. It uses React
 <BrowserRouter routes={routes} />
 ```
 
-**Properties**
+#### Properties
 
 - `routes`: This is a record object mapping route paths to React components. The "/404" path should be mapped to a component that will be displayed when no other route matches.
 
-**Example**
+#### Example
+
+##### Use routes object
 
 ```jsx
 const routes = {
@@ -34,6 +38,24 @@ const routes = {
 };
 
 <BrowserRouter routes={routes} />;
+```
+
+##### Use children
+
+```jsx
+const routes = {
+  "/": () => <HomePage />,
+  "/about": () => <AboutPage />,
+  "/404": () => <NotFoundPage />,
+};
+
+<BrowserRouter routes={routes}>
+  {(Page) => (
+    <InRouterContextProvider>
+      <Page />
+    </InRouterContextProvider>
+  )}
+</BrowserRouter>;
 ```
 
 ### Link
@@ -134,3 +156,11 @@ This type represents a router object. It has the following properties:
 - `navigate`: A function to navigate to a different route.
 - `pathname`: The path of the current location.
 - `params`: An object representing the URL parameters and search parameters.
+
+## Contributing
+
+Feel free to contribute to this project by submitting issues and pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
