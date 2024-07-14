@@ -1,10 +1,39 @@
 # router2
 
-Client side routing for React applications
+Client side routing for React applications. Inspired by Next.js.
+
+It supports history management, dynamic routing, and link creation.
 
 ## Overview
 
-The Router2 provides a way to manage routing in a React application. It supports history management, dynamic routing, and link creation.
+```js
+const { navigate, route } = useRouter();
+
+navigate({ pathname: "/new-route" });
+
+console.log(route);
+// {
+//   path: "/new-route",
+//   pathname: "/new-route",
+//   params: {},
+// }
+```
+
+```ts
+const { navigate, route } = useRouter();
+
+navigate(
+  { pathname: `/dynamic-route/${12}`, query: { key: "value" } },
+  { replace: true },
+);
+
+console.log(route);
+// {
+//   path: "/dynamic-route/12",
+//   pathname: "/dynamic-route/:id",
+//   params: { ":id": "12", key: "value" },
+// }
+```
 
 ## Getting Started
 
@@ -109,30 +138,6 @@ const Component = () => {
 };
 ```
 
-## Helper Functions
-
-### matchDynamicRoute
-
-This function checks if a given path matches a dynamic route. It takes the route path and the current pathname as parameters.
-
-### useCreateSingletonRouter
-
-This hook creates a router object. It takes the path of the current route as a parameter. The returned router object is similar to the one returned by the `useRouter` hook.
-
-## Contexts
-
-### historyContext
-
-This context provides the current history state.
-
-### setHistoryContext
-
-This context provides a function to update the history state.
-
-### routerContext
-
-This context provides the router object.
-
 ## Types
 
 ### History
@@ -141,12 +146,6 @@ This type represents a history entry. It has the following properties:
 
 - `pathname`: The path of the location.
 - `query`: An optional record object representing the search parameters of the URL.
-
-### RouterProps
-
-This type represents the properties of the BrowserRouter component. It has the following property:
-
-- `routes`: A record object mapping route paths to React components.
 
 ### Router
 
