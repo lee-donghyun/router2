@@ -4,6 +4,8 @@ Client side routing for React applications. Inspired by Next.js.
 
 It supports history management, dynamic routing, and link creation.
 
+**This npm package provides Typescript files, and it is your responsibility to build and bundle it.**
+
 ## Overview
 
 ```js
