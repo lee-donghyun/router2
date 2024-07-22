@@ -72,7 +72,7 @@ console.log(route);
 npm install router2
 ```
 
-## API
+## Components
 
 ### BrowserRouter
 
@@ -133,59 +133,36 @@ The Link component creates an anchor element that interacts with the router.
 - `replace`: An optional boolean indicating whether the current history entry should be replaced instead of creating a new entry.
 - All other properties of the anchor element are also supported.
 
-**Example**
-
-```jsx
-<Link pathname="/about" query={{ key: "value" }} replace>
-  About
-</Link>
-```
+## API
 
 ### useRouter
 
-The `useRouter` hook returns the current router context.
+The `useRouter` hook returns the router object.
 
 ```jsx
 const router = useRouter();
 ```
 
-The returned object has the following properties:
-
-- `path`: The path of the current route.
-- `navigate`: A function to navigate to a different route. It takes a `History` object and an optional options object as parameters.
-- `pathname`: The path of the current location.
-- `params`: An object representing the URL parameters and search parameters.
-
-**Example**
-
-```jsx
-const Component = () => {
-  const router = useRouter();
-  const handleClick = () => {
-    router.navigate({ pathname: "/new-route", query: { key: "value" } });
-  };
-
-  return <button onClick={handleClick}>Go to new route</button>;
-};
-```
+Returns [`Router`](#router) object.
 
 ## Types
-
-### History
-
-This type represents a history entry. It has the following properties:
-
-- `pathname`: The path of the location.
-- `query`: An optional record object representing the search parameters of the URL.
 
 ### Router
 
 This type represents a router object. It has the following properties:
 
 - `path`: The path of the current route.
-- `navigate`: A function to navigate to a different route.
+- `navigate`: A function to navigate to a different route. It takes a [`History`](#history) object and an optional options object as parameters.
 - `pathname`: The path of the current location.
 - `params`: An object representing the URL parameters and search parameters.
+
+### History
+
+This type represents a history entry. It has the following properties:
+
+- `path`: The path of the current route.
+- `pathname`: The pathname of the location.
+- `query`: An optional record object representing the search parameters of the URL.
 
 ## Contributing
 
