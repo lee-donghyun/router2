@@ -8,6 +8,7 @@
     "format": "prettier . --write"
   },
   "main": "lib/index.ts",
+  "license": "MIT",
   "peerDependencies": {
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.19",

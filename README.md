@@ -4,7 +4,36 @@ Client side routing for React applications. Inspired by Next.js.
 
 It supports history management, dynamic routing, and link creation.
 
-**This npm package provides Typescript files, and it is your responsibility to build and bundle it.**
+**This npm package provides TypeScript files, and it is your responsibility to build and bundle it.**
+
+<details>
+<summary>But Why?</summary>
+
+This library is designed to be as simple as possible. It does not include any dependencies, making it easy to understand and modify. Additionally, this approach results in a smaller bundle size.
+
+</details>
+
+<details>
+<summary>I need a bundled version.</summary>
+
+You can still fork the library and modify the `package.json`. For configuration details, see [rollup.config.js](rollup.config.js).
+
+To build the package, run:
+
+```sh
+npm run build
+```
+
+Update your `package.json` like this:
+
+```json
+{
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js"
+}
+```
+
+</details>
 
 ## Overview
 
