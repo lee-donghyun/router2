@@ -9,6 +9,15 @@
   },
   "main": "lib/index.ts",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "route",
+    "router",
+    "routing",
+    "history",
+    "link",
+    "spa"
+  ],
   "peerDependencies": {
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.19",
