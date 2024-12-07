@@ -5,7 +5,8 @@
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint lib --fix",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "type-check": "tsc --noEmit"
   },
   "main": "lib/index.ts",
   "license": "MIT",
