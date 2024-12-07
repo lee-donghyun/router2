@@ -9,6 +9,9 @@
     "type-check": "tsc --noEmit"
   },
   "main": "lib/index.ts",
+  "files": [
+    "lib"
+  ],
   "license": "MIT",
   "keywords": [
     "react",
