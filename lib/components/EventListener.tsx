@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 
 import { initialHistory, setHistoryContext } from "../contexts/history";
 import { History } from "../types";
 
-export const EventListener = ({ children }: { children: React.ReactNode }) => {
+export const EventListener = ({ children }: { children: ReactNode }) => {
   const setHistory = useContext(setHistoryContext);
   useEffect(() => {
     const onPopState = (e: PopStateEvent) => {

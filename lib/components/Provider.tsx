@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 
 import {
   historyContext,
@@ -7,7 +7,7 @@ import {
 } from "../contexts/history";
 import { History } from "../types";
 
-export const Provider = ({ children }: { children: React.ReactNode }) => {
+export const Provider = ({ children }: { children: ReactNode }) => {
   const [history, setHistory] = useState<History>(initialHistory);
   return (
     <historyContext.Provider value={history}>
