@@ -1,14 +1,16 @@
 import { AnchorHTMLAttributes, DetailedHTMLProps } from "react";
 
 import { useRouter } from "../hooks/useRouter";
-import { History } from "../types";
+import { History, NavigateOptions } from "../types";
 
 export const Link = ({
   pathname,
   query,
   replace,
   ...anchorProps
-}: History & { replace?: boolean } & Omit<
+}: History &
+  NavigateOptions &
+  Omit<
     DetailedHTMLProps<
       AnchorHTMLAttributes<HTMLAnchorElement>,
       HTMLAnchorElement
