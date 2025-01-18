@@ -8,7 +8,7 @@ export const Link = ({
   query,
   replace,
   ...anchorProps
-}: History & { replace: boolean } & Omit<
+}: History & { replace?: boolean } & Omit<
     DetailedHTMLProps<
       AnchorHTMLAttributes<HTMLAnchorElement>,
       HTMLAnchorElement
