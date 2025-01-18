@@ -2,10 +2,13 @@ import { useContext } from "react";
 
 import { historyContext, setHistoryContext } from "../contexts/history";
 import { History } from "../types";
+import { configContext } from "../contexts/config";
 
 export const useCreateSingletonRouter = (path: string | undefined) => {
   const history = useContext(historyContext);
   const setHistory = useContext(setHistoryContext);
+  const { use } = useContext(configContext);
+
   const navigate = (history: History, options?: { replace?: boolean }) => {
     const url = history.query
       ? `${history.pathname}?${new URLSearchParams(history.query).toString()}`
@@ -28,9 +31,17 @@ export const useCreateSingletonRouter = (path: string | undefined) => {
       ),
     };
   };
+
+  const combinedNavigate = use?.navigate?.reduceRight(
+    (combined, middleware) =>
+      (...params) =>
+        middleware(combined)(history, ...params),
+    navigate,
+  );
+
   return {
     path,
-    navigate,
+    navigate: combinedNavigate ?? navigate,
     pathname: history.pathname,
     params: getParams(),
   };
