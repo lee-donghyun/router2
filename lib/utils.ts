@@ -1,3 +1,5 @@
+import { InternalHistory, History } from "./types";
+
 export const initializeBrowserHistory = () => {
   if (window.location.pathname.endsWith("/")) {
     history.replaceState(undefined, "", window.location.pathname.slice(0, -1));
@@ -25,3 +27,8 @@ export const disableBrowserScrollRestoration = () => {
     window.history.scrollRestoration = "manual";
   }
 };
+
+export const make = (history: History): InternalHistory => ({
+  ...history,
+  pushedAt: Date.now(),
+});

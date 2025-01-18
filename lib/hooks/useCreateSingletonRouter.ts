@@ -3,20 +3,25 @@ import { useContext } from "react";
 import { historyContext, setHistoryContext } from "../contexts/history";
 import { History } from "../types";
 import { configContext } from "../contexts/config";
+import { make } from "../utils";
 
 export const useCreateSingletonRouter = (path: string | undefined) => {
   const history = useContext(historyContext);
   const setHistory = useContext(setHistoryContext);
-  const { use } = useContext(configContext);
+  const { on } = useContext(configContext);
 
-  const navigate = (history: History, options?: { replace?: boolean }) => {
-    const url = history.query
-      ? `${history.pathname}?${new URLSearchParams(history.query).toString()}`
-      : history.pathname;
-    setHistory(history);
+  const navigate = (next: History, options?: { replace?: boolean }) => {
+    const url = next.query
+      ? `${next.pathname}?${new URLSearchParams(next.query).toString()}`
+      : next.pathname;
+    const internalNext = make(next);
+    setHistory(internalNext);
     options?.replace
-      ? window.history.replaceState(history, "", url)
-      : window.history.pushState(history, "", url);
+      ? window.history.replaceState(internalNext, "", url)
+      : window.history.pushState(internalNext, "", url);
+    if (on?.navigate) {
+      on.navigate({ prev: history, next: internalNext, options });
+    }
   };
   const getParams = () => {
     const pathParams = path
@@ -32,16 +37,9 @@ export const useCreateSingletonRouter = (path: string | undefined) => {
     };
   };
 
-  const combinedNavigate = use?.navigate?.reduceRight(
-    (combined, middleware) =>
-      (...params) =>
-        middleware(combined)(history, ...params),
-    navigate,
-  );
-
   return {
     path,
-    navigate: combinedNavigate ?? navigate,
+    navigate,
     pathname: history.pathname,
     params: getParams(),
   };

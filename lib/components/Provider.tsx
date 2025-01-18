@@ -6,7 +6,7 @@ import {
   initialHistory,
   setHistoryContext,
 } from "../contexts/history";
-import { Config, History } from "../types";
+import { Config } from "../types";
 
 export const Provider = ({
   children,
@@ -15,7 +15,7 @@ export const Provider = ({
   children: ReactNode;
   config: Config | undefined;
 }) => {
-  const [history, setHistory] = useState<History>(initialHistory);
+  const [history, setHistory] = useState(initialHistory);
   return (
     <configContext.Provider value={config}>
       <historyContext.Provider value={history}>

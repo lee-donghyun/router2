@@ -5,6 +5,10 @@ export interface History {
   query?: Record<string, string>;
 }
 
+export interface InternalHistory extends History {
+  pushedAt: number;
+}
+
 export interface NavigateOptions {
   replace?: boolean;
 }
@@ -25,15 +29,15 @@ export interface Router {
   params: Record<string, string>;
 }
 
-type NavigateMiddleware = (
-  nextNavigate: Router["navigate"],
-) => (current: History, next: History, options?: NavigateOptions) => void;
-type PopStateMiddleware = (
-  nextPopState: (history: History) => void,
-) => (history: History, type: "pop" | "push") => void;
+interface Event {
+  prev: InternalHistory;
+  next: InternalHistory;
+}
+
 export interface Config {
-  use?: {
-    navigate?: NavigateMiddleware[];
-    popState?: PopStateMiddleware[];
+  on?: {
+    navigate?: (event: Event & { options?: NavigateOptions }) => void;
+    pop?: (event: Event) => void;
+    push?: (event: Event) => void;
   };
 }
