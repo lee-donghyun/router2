@@ -1,6 +1,7 @@
 import { useContext, useLayoutEffect, useRef } from "react";
-import { historyContext } from "../contexts/history";
+
 import { configContext } from "../contexts/config";
+import { historyContext } from "../contexts/history";
 
 export const useAfterEvent = () => {
   const history = useContext(historyContext);

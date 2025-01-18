@@ -31,11 +31,6 @@ export interface Router {
   params: Record<string, string>;
 }
 
-interface Event {
-  prev: InternalHistory;
-  next: InternalHistory;
-}
-
 export interface Config {
   on?: {
     beforeNavigate?: (event: {
@@ -43,10 +38,7 @@ export interface Config {
       next: InternalHistory;
       options?: NavigateOptions;
     }) => void;
-    afterNavigate?: (event: {
-      current: InternalHistory;
-      options?: NavigateOptions;
-    }) => void;
+    afterNavigate?: (event: { current: InternalHistory }) => void;
 
     beforePop?: (event: {
       prev: InternalHistory;

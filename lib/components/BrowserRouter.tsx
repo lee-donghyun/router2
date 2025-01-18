@@ -1,9 +1,9 @@
 import { useOnce } from "../hooks/useOnce";
-import { BrowserRouterProps, RouterProps } from "../types";
+import { BrowserRouterProps } from "../types";
 import {
   disableBrowserScrollRestoration,
   initializeBrowserHistory,
-} from "../utils";
+} from "./BrowserRouter.helper";
 import { EventListener } from "./EventListener";
 import { Provider } from "./Provider";
 import { Router } from "./Router";

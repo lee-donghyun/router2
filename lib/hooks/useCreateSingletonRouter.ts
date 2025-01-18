@@ -1,8 +1,8 @@
 import { useContext } from "react";
 
+import { configContext } from "../contexts/config";
 import { historyContext, setHistoryContext } from "../contexts/history";
 import { History } from "../types";
-import { configContext } from "../contexts/config";
 import { make } from "../utils";
 
 export const useCreateSingletonRouter = (path: string | undefined) => {

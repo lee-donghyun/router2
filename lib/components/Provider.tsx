@@ -1,11 +1,8 @@
 import { ReactNode, useState } from "react";
 
+import { initialHistory } from "../contant";
 import { configContext } from "../contexts/config";
-import {
-  historyContext,
-  initialHistory,
-  setHistoryContext,
-} from "../contexts/history";
+import { historyContext, setHistoryContext } from "../contexts/history";
 import { Config } from "../types";
 
 export const Provider = ({

@@ -1,19 +1,8 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-import { History, InternalHistory } from "../types";
-import { make } from "../utils";
+import { initialHistory } from "../contant";
+import { InternalHistory } from "../types";
 
-export const initialHistory: InternalHistory = make(
-  {
-    pathname: window.location.pathname,
-    query: window.location.search
-      ? Object.fromEntries(
-          new URLSearchParams(window.location.search).entries(),
-        )
-      : undefined,
-  },
-  "initialize",
-);
 export const historyContext = createContext<InternalHistory>(initialHistory);
 
 export const setHistoryContext = createContext<
