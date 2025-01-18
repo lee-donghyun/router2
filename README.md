@@ -38,9 +38,9 @@ Update your `package.json` like this:
 ## Overview
 
 ```js
-const { navigate, route } = useRouter();
+const { push, replace, route } = useRouter();
 
-navigate({ pathname: "/new-route" });
+push({ pathname: "/new-route" });
 
 console.log(route);
 // {
@@ -51,11 +51,10 @@ console.log(route);
 ```
 
 ```ts
-const { navigate, route } = useRouter();
+const { push, replace, route } = useRouter();
 
-navigate(
+replace(
   { pathname: `/dynamic-route/${12}`, query: { key: "value" } },
-  { replace: true },
 );
 
 console.log(route);
@@ -87,12 +86,14 @@ The BrowserRouter component is the main component of this library. It uses React
 - `routes`: This is a record object mapping route paths to React components. The "/404" path should be mapped to a component that will be displayed when no other route matches.
 - `config`: This is an optional object that can be used to configure the router's behavior. It supports the following properties:
   - `on`: An object containing event handlers for various router events. The supported events are:
-    - `beforeNavigate`: Called before the router navigates to a new route.
-    - `afterNavigate`: Called after the router navigates to a new route.
-    - `beforePop`: Called before the router handles a popstate event.
-    - `afterPop`: Called after the router handles a popstate event.
     - `beforePush`: Called before the router pushes a new state to the history.
     - `afterPush`: Called after the router pushes a new state to the history.
+    - `beforeReplace`: Called before the router replaces the current state in the history.
+    - `afterReplace`: Called after the router replaces the current state in the history.
+    - `beforeBack`: Called before the router handles a back event.
+    - `afterBack`: Called after the router handles a back event.
+    - `beforeFoward`: Called before the router handles a forward event.
+    - `afterFoward`: Called after the router handles a forward event.
 
 #### Example
 
@@ -139,10 +140,7 @@ const scroll = new Map();
 
 const config = {
   on: {
-    afterNavigate: () => {
-      globalThis.scrollTo({ top: 0 });
-    },
-    afterPop: (event) => {
+    afterReplace: (event) => {
       globalThis.scrollTo({
         top: scroll.get(event.current.pathname) ?? 0,
       });
@@ -152,13 +150,26 @@ const config = {
         top: scroll.get(event.current.pathname) ?? 0,
       });
     },
-    beforeNavigate: (event) => {
-      scroll.set(event.prev.pathname, window.scrollY);
-    },
-    beforePop: (event) => {
+    beforeReplace: (event) => {
       scroll.set(event.prev.pathname, window.scrollY);
     },
     beforePush: (event) => {
+      scroll.set(event.prev.pathname, window.scrollY);
+    },
+    afterBack: (event) => {
+      globalThis.scrollTo({
+        top: scroll.get(event.current.pathname) ?? 0,
+      });
+    },
+    beforeBack: (event) => {
+      scroll.set(event.prev.pathname, window.scrollY);
+    },
+    afterFoward: (event) => {
+      globalThis.scrollTo({
+        top: scroll.get(event.current.pathname) ?? 0,
+      });
+    },
+    beforeFoward: (event) => {
       scroll.set(event.prev.pathname, window.scrollY);
     },
   },
@@ -199,7 +210,8 @@ Returns [`Router`](#router) object.
 This type represents a router object. It has the following properties:
 
 - `path`: The path of the current route.
-- `navigate`: A function to navigate to a different route. It takes a [`History`](#history) object and an optional options object as parameters.
+- `push`: A function to navigate to a different route by pushing a new state to the history. It takes a [`History`](#history) object as a parameter.
+- `replace`: A function to navigate to a different route by replacing the current state in the history. It takes a [`History`](#history) object as a parameter.
 - `pathname`: The path of the current location.
 - `params`: An object representing the URL parameters and search parameters.
 
