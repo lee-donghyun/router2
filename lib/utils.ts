@@ -19,3 +19,9 @@ export const matchDynamicRoute = (path: string, pathname: string) => {
   }
   return path === pathname;
 };
+
+export const disableBrowserScrollRestoration = () => {
+  if ("scrollRestoration" in window.history) {
+    window.history.scrollRestoration = "manual";
+  }
+};
