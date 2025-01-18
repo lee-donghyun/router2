@@ -1,16 +1,14 @@
 import { AnchorHTMLAttributes, DetailedHTMLProps } from "react";
 
 import { useRouter } from "../hooks/useRouter";
-import { History, NavigateOptions } from "../types";
+import { History } from "../types";
 
 export const Link = ({
   pathname,
   query,
   replace,
   ...anchorProps
-}: History &
-  NavigateOptions &
-  Omit<
+}: History & { replace?: boolean } & Omit<
     DetailedHTMLProps<
       AnchorHTMLAttributes<HTMLAnchorElement>,
       HTMLAnchorElement
@@ -27,7 +25,11 @@ export const Link = ({
       href={url}
       onClick={(e) => {
         e.preventDefault();
-        router.navigate({ pathname, query }, { replace });
+        if (replace) {
+          router.replace({ pathname, query });
+        } else {
+          router.push({ pathname, query });
+        }
         anchorProps.onClick?.(e);
       }}
     />
