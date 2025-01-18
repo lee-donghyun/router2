@@ -14,14 +14,17 @@ export const useCreateSingletonRouter = (path: string | undefined) => {
     const url = next.query
       ? `${next.pathname}?${new URLSearchParams(next.query).toString()}`
       : next.pathname;
-    const internalNext = make(next);
+    const internalNext = make(next, "navigate");
+
+    if (on?.beforeNavigate) {
+      on.beforeNavigate({ prev: history, next: internalNext, options });
+    }
+
     setHistory(internalNext);
+
     options?.replace
       ? window.history.replaceState(internalNext, "", url)
       : window.history.pushState(internalNext, "", url);
-    if (on?.navigate) {
-      on.navigate({ prev: history, next: internalNext, options });
-    }
   };
   const getParams = () => {
     const pathParams = path

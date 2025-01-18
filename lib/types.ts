@@ -7,6 +7,8 @@ export interface History {
 
 export interface InternalHistory extends History {
   pushedAt: number;
+  madeAt: number;
+  type: "push" | "pop" | "navigate" | "initialize";
 }
 
 export interface NavigateOptions {
@@ -36,8 +38,26 @@ interface Event {
 
 export interface Config {
   on?: {
-    navigate?: (event: Event & { options?: NavigateOptions }) => void;
-    pop?: (event: Event) => void;
-    push?: (event: Event) => void;
+    beforeNavigate?: (event: {
+      prev: InternalHistory;
+      next: InternalHistory;
+      options?: NavigateOptions;
+    }) => void;
+    afterNavigate?: (event: {
+      current: InternalHistory;
+      options?: NavigateOptions;
+    }) => void;
+
+    beforePop?: (event: {
+      prev: InternalHistory;
+      next: InternalHistory;
+    }) => void;
+    afterPop?: (event: { current: InternalHistory }) => void;
+
+    beforePush?: (event: {
+      prev: InternalHistory;
+      next: InternalHistory;
+    }) => void;
+    afterPush?: (event: { current: InternalHistory }) => void;
   };
 }
