@@ -14,11 +14,14 @@ export const useAfterEvent = () => {
     if (on?.afterPush && history.type === "push") {
       on.afterPush({ current: history });
     }
-    if (on?.afterPop && history.type === "pop") {
-      on.afterPop({ current: history });
+    if (on?.afterReplace && history.type === "replace") {
+      on.afterReplace({ current: history });
     }
-    if (on?.afterNavigate && history.type === "navigate") {
-      on.afterNavigate({ current: history });
+    if (on?.afterBack && history.type === "back") {
+      on.afterBack({ current: history });
+    }
+    if (on?.afterFoward && history.type === "foward") {
+      on.afterFoward({ current: history });
     }
     handledMadeAtSet.current.add(history.madeAt);
   }, [history, on]);

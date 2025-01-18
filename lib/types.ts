@@ -8,11 +8,7 @@ export interface History {
 export interface InternalHistory extends History {
   pushedAt: number;
   madeAt: number;
-  type: "push" | "pop" | "navigate" | "initialize";
-}
-
-export interface NavigateOptions {
-  replace?: boolean;
+  type: "foward" | "back" | "push" | "replace" | "initialize";
 }
 
 export interface RouterProps {
@@ -26,30 +22,36 @@ export interface BrowserRouterProps extends RouterProps {
 
 export interface Router {
   path: string | undefined;
-  navigate: (history: History, options?: NavigateOptions) => void;
+  push: (history: History) => void;
+  replace: (history: History) => void;
   pathname: string;
   params: Record<string, string>;
 }
 
 export interface Config {
   on?: {
-    beforeNavigate?: (event: {
-      prev: InternalHistory;
-      next: InternalHistory;
-      options?: NavigateOptions;
-    }) => void;
-    afterNavigate?: (event: { current: InternalHistory }) => void;
-
-    beforePop?: (event: {
-      prev: InternalHistory;
-      next: InternalHistory;
-    }) => void;
-    afterPop?: (event: { current: InternalHistory }) => void;
-
     beforePush?: (event: {
       prev: InternalHistory;
       next: InternalHistory;
     }) => void;
     afterPush?: (event: { current: InternalHistory }) => void;
+
+    beforeReplace?: (event: {
+      prev: InternalHistory;
+      next: InternalHistory;
+    }) => void;
+    afterReplace?: (event: { current: InternalHistory }) => void;
+
+    beforeBack?: (event: {
+      prev: InternalHistory;
+      next: InternalHistory;
+    }) => void;
+    afterBack?: (event: { current: InternalHistory }) => void;
+
+    beforeFoward?: (event: {
+      prev: InternalHistory;
+      next: InternalHistory;
+    }) => void;
+    afterFoward?: (event: { current: InternalHistory }) => void;
   };
 }

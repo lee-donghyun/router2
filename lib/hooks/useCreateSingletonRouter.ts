@@ -2,29 +2,41 @@ import { useContext } from "react";
 
 import { configContext } from "../contexts/config";
 import { historyContext, setHistoryContext } from "../contexts/history";
-import { History } from "../types";
+import { History, Router } from "../types";
 import { make } from "../utils";
 
-export const useCreateSingletonRouter = (path: string | undefined) => {
+export const useCreateSingletonRouter = (path: string | undefined): Router => {
   const history = useContext(historyContext);
   const setHistory = useContext(setHistoryContext);
   const { on } = useContext(configContext);
 
-  const navigate = (next: History, options?: { replace?: boolean }) => {
+  const push = (next: History) => {
     const url = next.query
       ? `${next.pathname}?${new URLSearchParams(next.query).toString()}`
       : next.pathname;
-    const internalNext = make(next, "navigate");
+    const internalNext = make(next, "push");
 
-    if (on?.beforeNavigate) {
-      on.beforeNavigate({ prev: history, next: internalNext, options });
+    if (on?.beforePush) {
+      on.beforePush({ prev: history, next: internalNext });
     }
 
     setHistory(internalNext);
 
-    options?.replace
-      ? window.history.replaceState(internalNext, "", url)
-      : window.history.pushState(internalNext, "", url);
+    window.history.pushState(internalNext, "", url);
+  };
+  const replace = (next: History) => {
+    const url = next.query
+      ? `${next.pathname}?${new URLSearchParams(next.query).toString()}`
+      : next.pathname;
+    const internalNext = make(next, "replace");
+
+    if (on?.beforeReplace) {
+      on.beforeReplace({ prev: history, next: internalNext });
+    }
+
+    setHistory(internalNext);
+
+    window.history.replaceState(internalNext, "", url);
   };
   const getParams = () => {
     const pathParams = path
@@ -42,7 +54,8 @@ export const useCreateSingletonRouter = (path: string | undefined) => {
 
   return {
     path,
-    navigate,
+    push,
+    replace,
     pathname: history.pathname,
     params: getParams(),
   };
