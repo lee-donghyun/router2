@@ -1,14 +1,20 @@
 import { useOnce } from "../hooks/useOnce";
-import { RouterProps } from "../types";
-import { initializeBrowserHistory } from "../utils";
+import { BrowserRouterProps } from "../types";
+import {
+  disableBrowserScrollRestoration,
+  initializeBrowserHistory,
+} from "./BrowserRouter.helper";
 import { EventListener } from "./EventListener";
 import { Provider } from "./Provider";
 import { Router } from "./Router";
 
-export const BrowserRouter = (props: RouterProps) => {
-  useOnce(initializeBrowserHistory);
+export const BrowserRouter = ({ config, ...props }: BrowserRouterProps) => {
+  useOnce(() => {
+    initializeBrowserHistory();
+    disableBrowserScrollRestoration();
+  });
   return (
-    <Provider>
+    <Provider config={config}>
       <EventListener>
         <Router {...props} />
       </EventListener>

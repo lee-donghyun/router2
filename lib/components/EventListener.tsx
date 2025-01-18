@@ -1,18 +1,10 @@
-import { ReactNode, useContext, useEffect } from "react";
+import { ReactNode } from "react";
 
-import { initialHistory, setHistoryContext } from "../contexts/history";
-import { History } from "../types";
+import { useAfterEvent } from "../hooks/useAfterEvent";
+import { usePopStateEvent } from "../hooks/usePopStateEvent";
 
 export const EventListener = ({ children }: { children: ReactNode }) => {
-  const setHistory = useContext(setHistoryContext);
-  useEffect(() => {
-    const onPopState = (e: PopStateEvent) => {
-      setHistory((e.state as History | undefined) ?? initialHistory);
-    };
-    window.addEventListener("popstate", onPopState);
-    return () => {
-      window.removeEventListener("popstate", onPopState);
-    };
-  }, [setHistory]);
-  return <>{children}</>;
+  usePopStateEvent();
+  useAfterEvent();
+  return children;
 };

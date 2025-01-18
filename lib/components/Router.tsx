@@ -4,7 +4,7 @@ import { historyContext } from "../contexts/history";
 import { routerContext } from "../contexts/router";
 import { useCreateSingletonRouter } from "../hooks/useCreateSingletonRouter";
 import { RouterProps } from "../types";
-import { matchDynamicRoute } from "../utils";
+import { matchDynamicRoute } from "./Router.helper";
 
 export const Router = ({ routes, children }: RouterProps) => {
   const { pathname } = useContext(historyContext);

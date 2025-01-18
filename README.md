@@ -85,6 +85,14 @@ The BrowserRouter component is the main component of this library. It uses React
 #### Properties
 
 - `routes`: This is a record object mapping route paths to React components. The "/404" path should be mapped to a component that will be displayed when no other route matches.
+- `config`: This is an optional object that can be used to configure the router's behavior. It supports the following properties:
+  - `on`: An object containing event handlers for various router events. The supported events are:
+    - `beforeNavigate`: Called before the router navigates to a new route.
+    - `afterNavigate`: Called after the router navigates to a new route.
+    - `beforePop`: Called before the router handles a popstate event.
+    - `afterPop`: Called after the router handles a popstate event.
+    - `beforePush`: Called before the router pushes a new state to the history.
+    - `afterPush`: Called after the router pushes a new state to the history.
 
 #### Example
 
@@ -118,6 +126,47 @@ const routes = {
 </BrowserRouter>;
 ```
 
+##### Scroll Restoration Example
+
+```jsx
+const routes = {
+  "/": () => <HomePage />,
+  "/about": () => <AboutPage />,
+  "/404": () => <NotFoundPage />,
+};
+
+const scroll = new Map();
+
+const config = {
+  on: {
+    afterNavigate: () => {
+      globalThis.scrollTo({ top: 0 });
+    },
+    afterPop: (event) => {
+      globalThis.scrollTo({
+        top: scroll.get(event.current.pathname) ?? 0,
+      });
+    },
+    afterPush: (event) => {
+      globalThis.scrollTo({
+        top: scroll.get(event.current.pathname) ?? 0,
+      });
+    },
+    beforeNavigate: (event) => {
+      scroll.set(event.prev.pathname, window.scrollY);
+    },
+    beforePop: (event) => {
+      scroll.set(event.prev.pathname, window.scrollY);
+    },
+    beforePush: (event) => {
+      scroll.set(event.prev.pathname, window.scrollY);
+    },
+  },
+};
+
+<BrowserRouter routes={routes} config={config} />;
+```
+
 ### Link
 
 The Link component creates an anchor element that interacts with the router.
@@ -145,9 +194,7 @@ const router = useRouter();
 
 Returns [`Router`](#router) object.
 
-## Types
-
-### Router
+#### Router
 
 This type represents a router object. It has the following properties:
 
@@ -156,7 +203,7 @@ This type represents a router object. It has the following properties:
 - `pathname`: The path of the current location.
 - `params`: An object representing the URL parameters and search parameters.
 
-### History
+#### History
 
 This type represents a history entry. It has the following properties:
 

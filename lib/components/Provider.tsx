@@ -1,19 +1,25 @@
 import { ReactNode, useState } from "react";
 
-import {
-  historyContext,
-  initialHistory,
-  setHistoryContext,
-} from "../contexts/history";
-import { History } from "../types";
+import { initialHistory } from "../contant";
+import { configContext } from "../contexts/config";
+import { historyContext, setHistoryContext } from "../contexts/history";
+import { Config } from "../types";
 
-export const Provider = ({ children }: { children: ReactNode }) => {
-  const [history, setHistory] = useState<History>(initialHistory);
+export const Provider = ({
+  children,
+  config = {},
+}: {
+  children: ReactNode;
+  config: Config | undefined;
+}) => {
+  const [history, setHistory] = useState(initialHistory);
   return (
-    <historyContext.Provider value={history}>
-      <setHistoryContext.Provider value={setHistory}>
-        {children}
-      </setHistoryContext.Provider>
-    </historyContext.Provider>
+    <configContext.Provider value={config}>
+      <historyContext.Provider value={history}>
+        <setHistoryContext.Provider value={setHistory}>
+          {children}
+        </setHistoryContext.Provider>
+      </historyContext.Provider>
+    </configContext.Provider>
   );
 };
