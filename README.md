@@ -53,9 +53,7 @@ console.log(route);
 ```ts
 const { push, replace, route } = useRouter();
 
-replace(
-  { pathname: `/dynamic-route/${12}`, query: { key: "value" } },
-);
+replace({ pathname: `/dynamic-route/${12}`, query: { key: "value" } });
 
 console.log(route);
 // {
@@ -86,14 +84,14 @@ The BrowserRouter component is the main component of this library. It uses React
 - `routes`: This is a record object mapping route paths to React components. The "/404" path should be mapped to a component that will be displayed when no other route matches.
 - `config`: This is an optional object that can be used to configure the router's behavior. It supports the following properties:
   - `on`: An object containing event handlers for various router events. The supported events are:
-    - `beforePush`: Called before the router pushes a new state to the history.
-    - `afterPush`: Called after the router pushes a new state to the history.
-    - `beforeReplace`: Called before the router replaces the current state in the history.
-    - `afterReplace`: Called after the router replaces the current state in the history.
-    - `beforeBack`: Called before the router handles a back event.
-    - `afterBack`: Called after the router handles a back event.
-    - `beforeFoward`: Called before the router handles a forward event.
-    - `afterFoward`: Called after the router handles a forward event.
+    - `beforePush`: Called before the router pushes a new state to the history. It receives an event object and a `next` callback function.
+    - `afterPush`: Called after the router pushes a new state to the history. It receives an event object.
+    - `beforeReplace`: Called before the router replaces the current state in the history. It receives an event object and a `next` callback function.
+    - `afterReplace`: Called after the router replaces the current state in the history. It receives an event object.
+    - `beforeBack`: Called before the router handles a back event. It receives an event object and a `next` callback function.
+    - `afterBack`: Called after the router handles a back event. It receives an event object.
+    - `beforeForward`: Called before the router handles a forward event. It receives an event object and a `next` callback function.
+    - `afterForward`: Called after the router handles a forward event. It receives an event object.
 
 #### Example
 
@@ -150,27 +148,53 @@ const config = {
         top: scroll.get(event.current.pathname) ?? 0,
       });
     },
-    beforeReplace: (event) => {
+    beforeReplace: (event, next) => {
       scroll.set(event.prev.pathname, window.scrollY);
+      next();
     },
-    beforePush: (event) => {
+    beforePush: (event, next) => {
       scroll.set(event.prev.pathname, window.scrollY);
+      next();
     },
     afterBack: (event) => {
       globalThis.scrollTo({
         top: scroll.get(event.current.pathname) ?? 0,
       });
     },
-    beforeBack: (event) => {
+    beforeBack: (event, next) => {
       scroll.set(event.prev.pathname, window.scrollY);
+      next();
     },
-    afterFoward: (event) => {
+    afterForward: (event) => {
       globalThis.scrollTo({
         top: scroll.get(event.current.pathname) ?? 0,
       });
     },
-    beforeFoward: (event) => {
+    beforeForward: (event, next) => {
       scroll.set(event.prev.pathname, window.scrollY);
+      next();
+    },
+  },
+};
+
+<BrowserRouter routes={routes} config={config} />;
+```
+
+##### View Transition Example
+
+```jsx
+const routes = {
+  "/": () => <HomePage />,
+  "/about": () => <AboutPage />,
+  "/404": () => <NotFoundPage />,
+};
+
+const config = {
+  on: {
+    beforeNavigate: (event, next) => {
+      document.startViewTransition(() => {
+        next();
+      });
     },
   },
 };

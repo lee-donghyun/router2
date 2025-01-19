@@ -16,13 +16,16 @@ export const useCreateSingletonRouter = (path: string | undefined): Router => {
       : next.pathname;
     const internalNext = make(next, "push");
 
+    const apply = () => {
+      setHistory(internalNext);
+      window.history.pushState(internalNext, "", url);
+    };
+
     if (on?.beforePush) {
-      on.beforePush({ prev: history, next: internalNext });
+      on.beforePush({ prev: history, next: internalNext }, apply);
+    } else {
+      apply();
     }
-
-    setHistory(internalNext);
-
-    window.history.pushState(internalNext, "", url);
   };
   const replace = (next: History) => {
     const url = next.query
@@ -30,13 +33,16 @@ export const useCreateSingletonRouter = (path: string | undefined): Router => {
       : next.pathname;
     const internalNext = make(next, "replace");
 
+    const apply = () => {
+      setHistory(internalNext);
+      window.history.replaceState(internalNext, "", url);
+    };
+
     if (on?.beforeReplace) {
-      on.beforeReplace({ prev: history, next: internalNext });
+      on.beforeReplace({ prev: history, next: internalNext }, apply);
+    } else {
+      apply();
     }
-
-    setHistory(internalNext);
-
-    window.history.replaceState(internalNext, "", url);
   };
   const getParams = () => {
     const pathParams = path

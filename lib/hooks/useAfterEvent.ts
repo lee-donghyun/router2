@@ -20,8 +20,8 @@ export const useAfterEvent = () => {
     if (on?.afterBack && history.type === "back") {
       on.afterBack({ current: history });
     }
-    if (on?.afterFoward && history.type === "foward") {
-      on.afterFoward({ current: history });
+    if (on?.afterForward && history.type === "forward") {
+      on.afterForward({ current: history });
     }
     handledMadeAtSet.current.add(history.madeAt);
   }, [history, on]);

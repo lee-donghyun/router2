@@ -13,14 +13,23 @@ export const usePopStateEvent = () => {
     const onPopState = (e: PopStateEvent) => {
       setHistory((prev) => {
         const history = e.state as InternalHistory;
-        const type = prev.pushedAt < history.pushedAt ? "foward" : "back";
+        const type = prev.pushedAt < history.pushedAt ? "forward" : "back";
         const nextHistory = make(history, type);
         const handler =
-          on?.[({ foward: "beforeFoward", back: "beforeBack" } as const)[type]];
+          on?.[
+            ({ forward: "beforeForward", back: "beforeBack" } as const)[type]
+          ];
+
+        let state = prev;
+        const apply = () => {
+          state = nextHistory;
+        };
         if (handler) {
-          handler({ next: nextHistory, prev });
+          handler({ next: nextHistory, prev }, apply);
+        } else {
+          apply();
         }
-        return nextHistory;
+        return state;
       });
     };
     window.addEventListener("popstate", onPopState);
