@@ -90,8 +90,8 @@ The BrowserRouter component is the main component of this library. It uses React
     - `afterReplace`: Called after the router replaces the current state in the history. It receives an event object.
     - `beforeBack`: Called before the router handles a back event. It receives an event object and a `next` callback function.
     - `afterBack`: Called after the router handles a back event. It receives an event object.
-    - `beforeFoward`: Called before the router handles a forward event. It receives an event object and a `next` callback function.
-    - `afterFoward`: Called after the router handles a forward event. It receives an event object.
+    - `beforeForward`: Called before the router handles a forward event. It receives an event object and a `next` callback function.
+    - `afterForward`: Called after the router handles a forward event. It receives an event object.
 
 #### Example
 
@@ -165,12 +165,12 @@ const config = {
       scroll.set(event.prev.pathname, window.scrollY);
       next();
     },
-    afterFoward: (event) => {
+    afterForward: (event) => {
       globalThis.scrollTo({
         top: scroll.get(event.current.pathname) ?? 0,
       });
     },
-    beforeFoward: (event, next) => {
+    beforeForward: (event, next) => {
       scroll.set(event.prev.pathname, window.scrollY);
       next();
     },

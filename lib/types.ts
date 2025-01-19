@@ -8,7 +8,7 @@ export interface History {
 export interface InternalHistory extends History {
   pushedAt: number;
   madeAt: number;
-  type: "foward" | "back" | "push" | "replace" | "initialize";
+  type: "forward" | "back" | "push" | "replace" | "initialize";
 }
 
 export interface RouterProps {
@@ -48,7 +48,7 @@ export interface Config {
     beforeBack?: (event: BeforeEvent, next: () => void) => void;
     afterBack?: (event: AfterEvent) => void;
 
-    beforeFoward?: (event: BeforeEvent, next: () => void) => void;
-    afterFoward?: (event: AfterEvent) => void;
+    beforeForward?: (event: BeforeEvent, next: () => void) => void;
+    afterForward?: (event: AfterEvent) => void;
   };
 }
