@@ -17,10 +17,17 @@ export const usePopStateEvent = () => {
         const nextHistory = make(history, type);
         const handler =
           on?.[({ foward: "beforeFoward", back: "beforeBack" } as const)[type]];
+
+        let state = prev;
+        const apply = () => {
+          state = nextHistory;
+        };
         if (handler) {
-          handler({ next: nextHistory, prev });
+          handler({ next: nextHistory, prev }, apply);
+        } else {
+          apply();
         }
-        return nextHistory;
+        return state;
       });
     };
     window.addEventListener("popstate", onPopState);

@@ -28,30 +28,27 @@ export interface Router {
   params: Record<string, string>;
 }
 
+interface BeforeEvent {
+  prev: InternalHistory;
+  next: InternalHistory;
+}
+
+interface AfterEvent {
+  current: InternalHistory;
+}
+
 export interface Config {
   on?: {
-    beforePush?: (event: {
-      prev: InternalHistory;
-      next: InternalHistory;
-    }) => void;
-    afterPush?: (event: { current: InternalHistory }) => void;
+    beforePush?: (event: BeforeEvent, next: () => void) => void;
+    afterPush?: (event: AfterEvent) => void;
 
-    beforeReplace?: (event: {
-      prev: InternalHistory;
-      next: InternalHistory;
-    }) => void;
-    afterReplace?: (event: { current: InternalHistory }) => void;
+    beforeReplace?: (event: BeforeEvent, next: () => void) => void;
+    afterReplace?: (event: AfterEvent) => void;
 
-    beforeBack?: (event: {
-      prev: InternalHistory;
-      next: InternalHistory;
-    }) => void;
-    afterBack?: (event: { current: InternalHistory }) => void;
+    beforeBack?: (event: BeforeEvent, next: () => void) => void;
+    afterBack?: (event: AfterEvent) => void;
 
-    beforeFoward?: (event: {
-      prev: InternalHistory;
-      next: InternalHistory;
-    }) => void;
-    afterFoward?: (event: { current: InternalHistory }) => void;
+    beforeFoward?: (event: BeforeEvent, next: () => void) => void;
+    afterFoward?: (event: AfterEvent) => void;
   };
 }
