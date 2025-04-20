@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { configContext } from "../contexts/config";
 import { historyContext, setHistoryContext } from "../contexts/history";
 import { History, Router } from "../types";
-import { make } from "../utils";
+import { getParams, make } from "../utils";
 
 export const useCreateSingletonRouter = (path: string | undefined): Router => {
   const history = useContext(historyContext);
@@ -44,25 +44,12 @@ export const useCreateSingletonRouter = (path: string | undefined): Router => {
       apply();
     }
   };
-  const getParams = () => {
-    const pathParams = path
-      ?.split("/")
-      .map((path, index) => [path, index] as const)
-      .filter(([path]) => path.startsWith(":"));
-    const pathnames = history.pathname.split("/");
-    return {
-      ...history.query,
-      ...Object.fromEntries(
-        pathParams?.map(([path, index]) => [path, pathnames[index]]) ?? [],
-      ),
-    };
-  };
 
   return {
     path,
     push,
     replace,
     pathname: history.pathname,
-    params: getParams(),
+    params: getParams(history, path),
   };
 };
