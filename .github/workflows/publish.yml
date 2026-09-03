@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write # Required for npm Trusted Publishing (OIDC)
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,9 +26,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
+
+      - name: Ensure latest npm
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -49,4 +51,4 @@ jobs:
             echo "Version $CURRENT_VERSION already exists on npm. Bumping patch version..."
             npm version patch --no-git-tag-version
           fi
-          pnpm publish --provenance --access public --no-git-checks
+          npm publish --provenance --access public
