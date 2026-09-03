@@ -13,6 +13,17 @@
     "lib"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lee-donghyun/router2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lee-donghyun/router2/issues"
+  },
+  "homepage": "https://github.com/lee-donghyun/router2#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "react",
     "route",
