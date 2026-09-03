@@ -22,7 +22,7 @@ export const useCreateSingletonRouter = (path: string | undefined): Router => {
     };
 
     if (on?.beforePush) {
-      on.beforePush({ prev: history, next: internalNext }, apply);
+      on.beforePush({ next: internalNext, prev: history }, apply);
     } else {
       apply();
     }
@@ -39,17 +39,17 @@ export const useCreateSingletonRouter = (path: string | undefined): Router => {
     };
 
     if (on?.beforeReplace) {
-      on.beforeReplace({ prev: history, next: internalNext }, apply);
+      on.beforeReplace({ next: internalNext, prev: history }, apply);
     } else {
       apply();
     }
   };
 
   return {
+    params: getParams(history, path),
     path,
+    pathname: history.pathname,
     push,
     replace,
-    pathname: history.pathname,
-    params: getParams(history, path),
   };
 };

@@ -7,12 +7,14 @@ export default {
   external: ["react", "react-dom"],
   output: [
     {
-      file: "dist/cjs/index.js",
+      dir: "dist",
+      entryFileNames: "cjs/index.js",
       format: "cjs",
       sourcemap: true,
     },
     {
-      file: "dist/esm/index.js",
+      dir: "dist",
+      entryFileNames: "esm/index.js",
       format: "esm",
       sourcemap: true,
     },

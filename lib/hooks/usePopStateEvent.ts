@@ -17,7 +17,7 @@ export const usePopStateEvent = () => {
         const nextHistory = make(history, type);
         const handler =
           on?.[
-            ({ forward: "beforeForward", back: "beforeBack" } as const)[type]
+            ({ back: "beforeBack", forward: "beforeForward" } as const)[type]
           ];
 
         let state = prev;

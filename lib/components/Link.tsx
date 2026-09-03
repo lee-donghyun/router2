@@ -4,17 +4,19 @@ import { useRouter } from "../hooks/useRouter";
 import { History } from "../types";
 
 export const Link = ({
+  children,
   pathname,
   query,
   replace,
   ...anchorProps
-}: History & { replace?: boolean } & Omit<
+}: History &
+  Omit<
     DetailedHTMLProps<
       AnchorHTMLAttributes<HTMLAnchorElement>,
       HTMLAnchorElement
     >,
     "href"
-  >) => {
+  > & { replace?: boolean }) => {
   const url = query
     ? `${pathname}?${new URLSearchParams(query).toString()}`
     : pathname;
@@ -32,6 +34,8 @@ export const Link = ({
         }
         anchorProps.onClick?.(e);
       }}
-    />
+    >
+      {children}
+    </a>
   );
 };
